@@ -46,7 +46,7 @@ const reset = () => {
 const makeAiTurn = () => {
   const bestMove = minimax(board, aiPlayer)
   board[bestMove.idx] = aiPlayer
-  result.innerHTML = '<img src="../img/spiner.gif">'
+  result.innerHTML = '<img src="img/spiner.gif">'
   setTimeout(() => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
