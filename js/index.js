@@ -40,14 +40,14 @@ const reset = () => {
   game.innerHTML = ''
   cellList = []
   board = [...Array(9).keys()]
-  result.innerHTML =''
+  result.innerHTML = ''
   init()
 }
 
-const makeAiTurn = () =>{
+const makeAiTurn = () => {
   const bestMove = minimax(board, aiPlayer)
   board[bestMove.idx] = aiPlayer
-  result.innerHTML = '<img src="../img/spiner.gif">'
+  result.innerHTML = '<img src="img/spiner.gif">'
   setTimeout(() => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
@@ -85,7 +85,7 @@ const minimax = (board, player) => {
   const emptyCells = findEmptyCells(board)
   if (checkWinner(board, huPlayer)) {
     return { score: -1 }
-  } else if(checkWinner(board, aiPlayer)) {
+  } else if (checkWinner(board, aiPlayer)) {
     return { score: 1 }
   } else if (emptyCells.length === 0) {
     return { score: 0 }
@@ -98,14 +98,14 @@ const minimax = (board, player) => {
     board[emptyCells[i]] = player
     move.idx = emptyCells[i]
     if (player === huPlayer) {
-      const payload  = minimax(board, aiPlayer) 
-      move.score = payload.score 
-    } 
+      const payload = minimax(board, aiPlayer)
+      move.score = payload.score
+    }
     if (player === aiPlayer) {
-      const payload  = minimax(board, huPlayer) 
-      move.score = payload.score 
-    } 
-    board[emptyCells[i]] = move.idx 
+      const payload = minimax(board, huPlayer)
+      move.score = payload.score
+    }
+    board[emptyCells[i]] = move.idx
     moves.push(move)
   }
 
@@ -116,7 +116,7 @@ const minimax = (board, player) => {
     for (let i = 0; i < moves.length; i++) {
       if (moves[i].score > bestScore) {
         bestScore = moves[i].score
-        bestMove = i 
+        bestMove = i
       }
     }
   } else {
@@ -124,7 +124,7 @@ const minimax = (board, player) => {
     for (let i = 0; i < moves.length; i++) {
       if (moves[i].score < bestScore) {
         bestScore = moves[i].score
-        bestMove = i 
+        bestMove = i
       }
     }
   }
@@ -135,7 +135,7 @@ const minimax = (board, player) => {
 const findEmptyCells = (board) => {
   return board.filter(c => c !== huPlayer && c !== aiPlayer)
 }
-  
+
 human.addEventListener('click', () => {
   reset()
   cellList.forEach(c => {
