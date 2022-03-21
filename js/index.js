@@ -3,6 +3,7 @@ const result = document.getElementById('result')
 const human = document.getElementById('human')
 const ai = document.getElementById('ai')
 
+let firstMove = true
 let aiPlayer = '', huPlayer = ''
 let cellList = []
 let board = [...Array(9).keys()]
@@ -17,6 +18,7 @@ const init = () => {
 }
 
 const humanPlay = (e) => {
+  firstMove = false
   const id = e.target.getAttribute('data-id')
   board[+id] = huPlayer
   cellList[+id].removeEventListener('click', humanPlay)
@@ -44,6 +46,16 @@ const reset = () => {
 }
 
 const makeAiTurn = () => {
+  if (firstMove) {
+    id = aiRandomMove()
+    board[id] = aiPlayer
+    cellList[id].removeEventListener('click', humanPlay)
+    cellList[id].classList.remove('isActive')
+    cellList[id].innerHTML = `<span>${aiPlayer}</span>`
+    firstMove = false
+    return
+  }
+
   const bestMove = minimax(board, aiPlayer)
   board[bestMove.idx] = aiPlayer
   result.innerHTML = '<img src="img/spiner.gif">'
@@ -51,14 +63,17 @@ const makeAiTurn = () => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
     cellList[bestMove.idx].innerHTML = `<span>${aiPlayer}</span>`
-    if (!findEmptyCells(board).length) {
-      result.innerHTML = '<h4>Draw!</h4>'
+    if (checkWinner(board, aiPlayer)) {
+      findEmptyCells(board).forEach(c => {
+        cellList[c].removeEventListener('click', humanPlay)
+        cellList[c].classList.remove('isActive')
+       })
+      result.innerHTML = '<h4>AI wins!</h4>'
       return
     }
 
-    if (checkWinner(board, aiPlayer)) {
-      findEmptyCells(board).forEach(c => cellList[c].removeEventListener('click', humanPlay))
-      result.innerHTML = '<h4>Ai wins!</h4>'
+    if (!findEmptyCells(board).length) {
+      result.innerHTML = '<h4>Draw!</h4>'
       return
     }
 
@@ -131,6 +146,10 @@ const minimax = (board, player) => {
   return moves[bestMove]
 }
 
+const aiRandomMove = () => {
+  return Math.floor(Math.random() * 9)
+}
+
 const findEmptyCells = (board) => {
   return board.filter(c => c !== huPlayer && c !== aiPlayer)
 }
@@ -148,6 +167,7 @@ human.addEventListener('click', () => {
 
 ai.addEventListener('click', () => {
   reset()
+  firstMove = true
   aiPlayer = 'X'
   huPlayer = 'O'
   cellList.forEach(c => {
@@ -157,3 +177,4 @@ ai.addEventListener('click', () => {
   makeAiTurn()
 })
 init()
+aiRandomMove()
