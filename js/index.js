@@ -3,7 +3,7 @@ const result = document.getElementById('result')
 const human = document.getElementById('human')
 const ai = document.getElementById('ai')
 
-const aiPlayer = 'X', huPlayer = 'O'
+let aiPlayer = '', huPlayer = ''
 let cellList = []
 let board = [...Array(9).keys()]
 
@@ -11,7 +11,6 @@ const init = () => {
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div')
     cell.setAttribute('data-id', i)
-    // cell.addEventListener('click', humanPlay)
     game.appendChild(cell)
     cellList.push(cell)
   }
@@ -47,7 +46,7 @@ const reset = () => {
 const makeAiTurn = () => {
   const bestMove = minimax(board, aiPlayer)
   board[bestMove.idx] = aiPlayer
-  result.innerHTML = '<img src="img/spiner.gif">'
+  result.innerHTML = '<img src="../img/spiner.gif">'
   setTimeout(() => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
@@ -138,6 +137,8 @@ const findEmptyCells = (board) => {
 
 human.addEventListener('click', () => {
   reset()
+  aiPlayer = 'O'
+  huPlayer = 'X'
   cellList.forEach(c => {
     c.addEventListener('click', humanPlay)
     c.classList.add('isActive')
@@ -147,6 +148,8 @@ human.addEventListener('click', () => {
 
 ai.addEventListener('click', () => {
   reset()
+  aiPlayer = 'X'
+  huPlayer = 'O'
   cellList.forEach(c => {
     c.addEventListener('click', humanPlay)
     c.classList.add('isActive')
