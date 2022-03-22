@@ -32,7 +32,7 @@ const humanPlay = (e) => {
   board[+id] = huPlayer
   cellList[+id].removeEventListener('click', humanPlay)
   cellList[+id].classList.remove('isActive')
-  cellList[+id].innerHTML = `<span>${huPlayer}</span>`
+  cellList[+id].innerHTML = huPlayer
 
   if (!findEmptyCells(board).length) {
     result.innerHTML = '<h4>Draw!</h4>'
@@ -54,7 +54,7 @@ const makeAiTurn = () => {
       board[id] = aiPlayer
       cellList[id].removeEventListener('click', humanPlay)
       cellList[id].classList.remove('isActive')
-      cellList[id].innerHTML = `<span>${aiPlayer}</span>`
+      cellList[id].innerHTML = aiPlayer
       firstMove = false
       result.innerHTML = '<h4>GO!</h4>'
     }, timeout)
@@ -67,7 +67,7 @@ const makeAiTurn = () => {
   setTimeout(() => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
-    cellList[bestMove.idx].innerHTML = `<span>${aiPlayer}</span>`
+    cellList[bestMove.idx].innerHTML = aiPlayer
     if (checkWinner(board, aiPlayer)) {
       findEmptyCells(board).forEach(c => {
         cellList[c].removeEventListener('click', humanPlay)
@@ -169,15 +169,15 @@ const startNewGame = () => {
 
 human.addEventListener('click', () => {
   startNewGame()
-  aiPlayer = 'O'
-  huPlayer = 'X'
+  aiPlayer = '<img src="img/zero-AI.jpg" class="moveImg">'
+  huPlayer = '<img src="img/cross.jpg" class="moveImg">'
   result.innerHTML = '<h4>GO!</h4>'
 })
 
 ai.addEventListener('click', () => {
   startNewGame()
-  aiPlayer = 'X'
-  huPlayer = 'O'
+  aiPlayer = '<img src="img/cross-AI.jpg" class="moveImg">'
+  huPlayer = '<img src="img/zero.jpg" class="moveImg">'
   firstMove = true
   makeAiTurn()
 })
