@@ -2,6 +2,7 @@ const game = document.getElementById('game')
 const result = document.getElementById('result')
 const human = document.getElementById('human')
 const ai = document.getElementById('ai')
+const timeout = 500
 
 let firstMove = true
 let aiPlayer = '', huPlayer = ''
@@ -15,6 +16,14 @@ const init = () => {
     game.appendChild(cell)
     cellList.push(cell)
   }
+}
+
+const reset = () => {
+  game.innerHTML = ''
+  cellList = []
+  board = [...Array(9).keys()]
+  result.innerHTML = ''
+  init()
 }
 
 const humanPlay = (e) => {
@@ -37,22 +46,18 @@ const humanPlay = (e) => {
   makeAiTurn()
 }
 
-const reset = () => {
-  game.innerHTML = ''
-  cellList = []
-  board = [...Array(9).keys()]
-  result.innerHTML = ''
-  init()
-}
-
 const makeAiTurn = () => {
   if (firstMove) {
-    id = aiRandomMove()
-    board[id] = aiPlayer
-    cellList[id].removeEventListener('click', humanPlay)
-    cellList[id].classList.remove('isActive')
-    cellList[id].innerHTML = `<span>${aiPlayer}</span>`
-    firstMove = false
+    result.innerHTML = '<img src="img/spiner.gif">'
+    setTimeout(() => {
+      id = aiRandomMove()
+      board[id] = aiPlayer
+      cellList[id].removeEventListener('click', humanPlay)
+      cellList[id].classList.remove('isActive')
+      cellList[id].innerHTML = `<span>${aiPlayer}</span>`
+      firstMove = false
+      result.innerHTML = '<h4>GO!</h4>'
+    }, timeout)
     return
   }
 
@@ -78,7 +83,7 @@ const makeAiTurn = () => {
     }
 
     result.innerHTML = '<h4>GO!</h4>'
-  }, 500)
+  }, timeout)
 }
 
 const checkWinner = (board, player) => {
@@ -154,27 +159,27 @@ const findEmptyCells = (board) => {
   return board.filter(c => c !== huPlayer && c !== aiPlayer)
 }
 
-human.addEventListener('click', () => {
+const startNewGame = () => {
   reset()
-  aiPlayer = 'O'
-  huPlayer = 'X'
   cellList.forEach(c => {
     c.addEventListener('click', humanPlay)
     c.classList.add('isActive')
   })
+}
+
+human.addEventListener('click', () => {
+  startNewGame()
+  aiPlayer = 'O'
+  huPlayer = 'X'
   result.innerHTML = '<h4>GO!</h4>'
 })
 
 ai.addEventListener('click', () => {
-  reset()
-  firstMove = true
+  startNewGame()
   aiPlayer = 'X'
   huPlayer = 'O'
-  cellList.forEach(c => {
-    c.addEventListener('click', humanPlay)
-    c.classList.add('isActive')
-  })
+  firstMove = true
   makeAiTurn()
 })
+
 init()
-aiRandomMove()
