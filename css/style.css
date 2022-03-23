@@ -1,7 +1,12 @@
+:root {
+  --cell-size: 120px;
+}
+
 body {
   display: flex;
   justify-content: center;
 }
+
 #game {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -10,12 +15,11 @@ body {
 }
 
 #game div {
-  width: 130px;
-  height: 130px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background: #fff; */
 }
 
 .menu-container {
@@ -25,7 +29,7 @@ body {
   align-items: center;
 }
 
-.isActive {
+.isActive:hover {
   cursor: pointer;
 }
 
@@ -41,6 +45,6 @@ img {
 }
 
 .moveImg {
-  width: 80px;
-  height: 80px;
+  width: 60%;
+  height: 60%;
 }
