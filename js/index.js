@@ -5,7 +5,7 @@ const ai = document.getElementById('ai')
 const timeout = 500
 
 let firstMove = true
-let aiPlayer = '', huPlayer = ''
+let aiPlayer = '', huPlayer = '', aiWin =''
 let cellList = []
 let board = [...Array(9).keys()]
 
@@ -68,7 +68,9 @@ const makeAiTurn = () => {
     cellList[bestMove.idx].removeEventListener('click', humanPlay)
     cellList[bestMove.idx].classList.remove('isActive')
     cellList[bestMove.idx].innerHTML = aiPlayer
-    if (checkWinner(board, aiPlayer)) {
+    const win = checkWinner(board, aiPlayer)
+    if (win) {
+      win.forEach(i => cellList[i].innerHTML = aiWin)
       findEmptyCells(board).forEach(c => {
         cellList[c].removeEventListener('click', humanPlay)
         cellList[c].classList.remove('isActive')
@@ -86,16 +88,36 @@ const makeAiTurn = () => {
   }, timeout)
 }
 
+// const checkWinner = (board, player) => {
+//   if (board[0] === player && board[1] === player && board[2] === player ||
+//     board[3] === player && board[4] === player && board[5] === player ||
+//     board[6] === player && board[7] === player && board[8] === player ||
+//     board[0] === player && board[3] === player && board[6] === player ||
+//     board[1] === player && board[4] === player && board[7] === player ||
+//     board[2] === player && board[5] === player && board[8] === player ||
+//     board[0] === player && board[4] === player && board[8] === player ||
+//     board[2] === player && board[4] === player && board[6] === player) {
+//     return true
+//   }
+//   return false
+// }
+
 const checkWinner = (board, player) => {
-  if (board[0] === player && board[1] === player && board[2] === player ||
-    board[3] === player && board[4] === player && board[5] === player ||
-    board[6] === player && board[7] === player && board[8] === player ||
-    board[0] === player && board[3] === player && board[6] === player ||
-    board[1] === player && board[4] === player && board[7] === player ||
-    board[2] === player && board[5] === player && board[8] === player ||
-    board[0] === player && board[4] === player && board[8] === player ||
-    board[2] === player && board[4] === player && board[6] === player) {
-    return true
+  const win = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
+
+  for (i = 0; i < win.length; i++) {
+    if (board[win[i][0]] === player && board[win[i][1]] === player && board[win[i][2]] === player) {
+      return win[i]
+    }
   }
   return false
 }
@@ -171,6 +193,7 @@ human.addEventListener('click', () => {
   startNewGame()
   aiPlayer = '<img src="img/zero-AI.jpg" class="moveImg">'
   huPlayer = '<img src="img/cross.jpg" class="moveImg">'
+  aiWin = '<img src="img/zero-AI-win.jpg" class="moveImg">'
   result.innerHTML = '<h4>GO!</h4>'
 })
 
@@ -178,6 +201,7 @@ ai.addEventListener('click', () => {
   startNewGame()
   aiPlayer = '<img src="img/cross-AI.jpg" class="moveImg">'
   huPlayer = '<img src="img/zero.jpg" class="moveImg">'
+  aiWin = '<img src="img/cross-AI-win.jpg" class="moveImg">'
   firstMove = true
   makeAiTurn()
 })
